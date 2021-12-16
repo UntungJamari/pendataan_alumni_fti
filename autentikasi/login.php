@@ -6,18 +6,17 @@ $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['login'])) {
     if (empty($_POST["nim_nip"]) || empty($_POST["password"])) {
-        echo "aaaa";
+        $gagal = "Input tidak valid!!!";
     } else {
         $nim_nip = mysqli_real_escape_string($koneksi, $_POST["nim_nip"]);
         $password = mysqli_real_escape_string($koneksi, $_POST["password"]);
 
         $query = mysqli_query($koneksi, "select * from user WHERE nim_nip = '$nim_nip'");
         if (mysqli_affected_rows($koneksi) == 0) {
-            echo "Log In Gagal";
+            $gagal = "Log In Gagal!!!";
         } else {
             $result = mysqli_fetch_assoc($query);
             if (password_verify($password, $result["password"])) {
-                echo "OK";
                 if ($result['role'] == "Admin") {
                     $_SESSION['nip'] = $nim_nip;
                     $_SESSION['role'] = "Admin";
@@ -28,7 +27,7 @@ if (isset($_POST['login'])) {
                     header("location:../admin/dashboard.php");
                 }
             } else {
-                echo "Log In Gagal";
+                $gagal = "Log In Gagal!!!";
             }
         }
     }
@@ -75,6 +74,17 @@ if (isset($_POST['login'])) {
                         </div>
                         <form method="POST" action="login.php">
                             <div class="row mt-5">
+                                <div class="col-md-12">
+                                    <?php
+                                    if (isset($gagal)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-2">
                                 </div>
                                 <div class="col-md-8">
