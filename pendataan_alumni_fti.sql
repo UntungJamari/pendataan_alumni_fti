@@ -33,7 +33,7 @@ CREATE TABLE `alumni` (
   `tanggal_lahir` date NOT NULL,
   `kode_jurusan` varchar(100) NOT NULL,
   `ipk` double NOT NULL,
-  `intansi` varchar(100) NOT NULL,
+  `instansi` varchar(100) NOT NULL,
   `jabatan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
