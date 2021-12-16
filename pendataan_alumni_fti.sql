@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2021 at 10:23 AM
+-- Generation Time: Dec 16, 2021 at 06:47 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -108,6 +108,13 @@ CREATE TABLE `staf_fakultas` (
   `nama` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `staf_fakultas`
+--
+
+INSERT INTO `staf_fakultas` (`nip`, `nama`) VALUES
+('1234567890', 'Steven');
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +126,13 @@ CREATE TABLE `user` (
   `password` varchar(100) NOT NULL,
   `role` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`nim_nip`, `password`, `role`) VALUES
+('1234567890', '$2y$10$YIkSagzeHx6KrdxFkPU92uDJb8qNb8kYU.GQDK2HJk7q1bDmM71Pe', 'Admin');
 
 --
 -- Indexes for dumped tables
