@@ -1,3 +1,3 @@
 <?php
 
-header("location:autentikasi/login.php");
+header("location:autentikasi/login.php?info=logindulu");

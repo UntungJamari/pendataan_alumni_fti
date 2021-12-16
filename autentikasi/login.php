@@ -81,6 +81,11 @@ if (isset($_POST['login'])) {
                                         <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
                                     <?php
                                     }
+                                    if (isset($_GET['info'])) {
+                                    ?>
+                                        <p class="text-info pull-middle"><?php echo "Silakan Log In Terlebih Dahulu!"; ?></p>
+                                    <?php
+                                    }
                                     ?>
                                 </div>
                             </div>
