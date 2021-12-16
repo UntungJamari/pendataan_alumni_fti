@@ -1,17 +1,39 @@
-<!--
-=========================================================
-* Material Dashboard Dark Edition - v2.1.0
-=========================================================
+<?php
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-dark
-* Copyright 2019 Creative Tim (http://www.creative-tim.com)
+session_start();
 
-* Coded by www.creative-tim.com
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-=========================================================
+if (isset($_POST['login'])) {
+    if (empty($_POST["nim_nip"]) || empty($_POST["password"])) {
+        echo "aaaa";
+    } else {
+        $nim_nip = mysqli_real_escape_string($koneksi, $_POST["nim_nip"]);
+        $password = mysqli_real_escape_string($koneksi, $_POST["password"]);
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
+        $query = mysqli_query($koneksi, "select * from user WHERE nim_nip = '$nim_nip'");
+        if (mysqli_affected_rows($koneksi) == 0) {
+            echo "Log In Gagal";
+        } else {
+            $result = mysqli_fetch_assoc($query);
+            if (password_verify($password, $result["password"])) {
+                echo "OK";
+                if ($result['role'] == "Admin") {
+                    $_SESSION['nip'] = $nim_nip;
+                    $_SESSION['role'] = "Admin";
+                    $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nim_nip'");
+                    $result = mysqli_fetch_assoc($query);
+                    $_SESSION['nama'] = $result["nama"];
+                    echo $_SESSION['nip'] . $_SESSION['role'] . $_SESSION['nama'];
+                    header("location:../admin/dashboard.php");
+                }
+            } else {
+                echo "Log In Gagal";
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,14 +73,14 @@
                             <h4 class="card-title">Fakultas Teknologi Informasi</h4>
                             <h4 class="card-title">Universitas Andalas</h4>
                         </div>
-                        <form>
+                        <form method="POST" action="login.php">
                             <div class="row mt-5">
                                 <div class="col-md-2">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="form-group text-left">
                                         <label class="bmd-label-floating">NIM/NIP</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="nim_nip">
                                     </div>
                                 </div>
                             </div>
@@ -68,11 +90,11 @@
                                 <div class="col-md-8">
                                     <div class="form-group text-left">
                                         <label class="bmd-label-floating">Password</label>
-                                        <input type="password" class="form-control">
+                                        <input type="password" class="form-control" name="password">
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary pull-middle mt-3 mb-3">Log In</button>
+                            <button type="submit" class="btn btn-primary pull-middle mt-3 mb-3" name="login">Log In</button>
                             <div class="clearfix"></div>
                         </form>
                         <footer class="footer">
