@@ -23,8 +23,23 @@ if (isset($_POST['login'])) {
                     $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nim_nip'");
                     $result = mysqli_fetch_assoc($query);
                     $_SESSION['nama'] = $result["nama"];
-                    echo $_SESSION['nip'] . $_SESSION['role'] . $_SESSION['nama'];
                     header("location:../admin/dashboard.php");
+                }
+                if ($result['role'] == "User_Mahasiswa") {
+                    $_SESSION['nim'] = $nim_nip;
+                    $_SESSION['role'] = "User_Mahasiswa";
+                    $query = mysqli_query($koneksi, "select * from mahasiswa WHERE nim = '$nim_nip'");
+                    $result = mysqli_fetch_assoc($query);
+                    $_SESSION['nama'] = $result["nama"];
+                    header("location:../user/mahasiswa/dashboard.php");
+                }
+                if ($result['role'] == "User_Alumni") {
+                    $_SESSION['nim'] = $nim_nip;
+                    $_SESSION['role'] = "User_Alumni";
+                    $query = mysqli_query($koneksi, "select * from alumni WHERE nim = '$nim_nip'");
+                    $result = mysqli_fetch_assoc($query);
+                    $_SESSION['nama'] = $result["nama"];
+                    header("location:../user/alumni/dashboard.php");
                 }
             } else {
                 $gagal = "Log In Gagal!!!";
