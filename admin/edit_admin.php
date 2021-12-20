@@ -203,7 +203,8 @@ if (isset($_POST['tambah_admin'])) {
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating">NIP</label>
-                                                    <input type="text" class="form-control" name="nip" value="<?php echo $result['nip']; ?>">
+                                                    <input type="text" class="form-control" value="<?php echo $result['nip']; ?>" disabled>
+                                                    <input type="hidden" class="form-control" name="nip" value="<?php echo $result['nip']; ?>">
                                                 </div>
                                             </div>
                                         </div>
