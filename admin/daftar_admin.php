@@ -50,59 +50,42 @@ if (isset($_GET['hapus'])) {
 
         Tip 2: you can also add an image using data-image tag
     -->
-            <div class="logo"><a href="http://www.creative-tim.com" class="simple-text logo-normal">
+            <div class="logo"><a href="javascript:void(0)" class="simple-text logo-normal">
                     Pendataan Alumni FTI
                 </a></div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="nav-item  ">
-                        <a class="nav-link" href="./dashboard.html">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./dashboard.php">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="./user.html">
-                            <i class="material-icons">person</i>
-                            <p>User Profile</p>
-                        </a>
-                    </li>
-                    <li class="nav-item active ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="./daftar_admin.php">
-                            <i class="material-icons">content_paste</i>
+                            <i class="material-icons">admin_panel_settings</i>
                             <p>Admin</p>
                         </a>
                     </li>
                     <li class="nav-item ">
+                        <a class="nav-link" href="./data_alumni.php">
+                            <i class="material-icons">person</i>
+                            <p>Alumni</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
                         <a class="nav-link" href="./typography.html">
-                            <i class="material-icons">library_books</i>
-                            <p>Typography</p>
+                            <i class="material-icons">school</i>
+                            <p>Mahasiswa</p>
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="./icons.html">
-                            <i class="material-icons">bubble_chart</i>
-                            <p>Icons</p>
+                        <a class="nav-link" href="./edit_profile.php">
+                            <i class="material-icons">manage_accounts</i>
+                            <p>Profile</p>
                         </a>
                     </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="./map.html">
-                            <i class="material-icons">location_ons</i>
-                            <p>Maps</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="./notifications.html">
-                            <i class="material-icons">notifications</i>
-                            <p>Notifications</p>
-                        </a>
-                    </li>
-                    <!-- <li class="nav-item active-pro ">
-                <a class="nav-link" href="./upgrade.html">
-                    <i class="material-icons">unarchive</i>
-                    <p>Upgrade to PRO</p>
-                </a>
-            </li> -->
                 </ul>
             </div>
         </div>
@@ -120,45 +103,12 @@ if (isset($_GET['hapus'])) {
                         <span class="navbar-toggler-icon icon-bar"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end">
-                        <form class="navbar-form" action="daftar_admin.php">
-                            <div class="input-group no-border">
-                                <input type="text" name="cari" class="form-control" placeholder="Cari Admin...">
-                                <button type="submit" class="btn btn-default btn-round btn-just-icon">
-                                    <i class="material-icons">search</i>
-                                    <div class="ripple-container"></div>
-                                </button>
-                            </div>
-                        </form>
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)">
-                                    <i class="material-icons">dashboard</i>
+                                <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
+                                    <i class="material-icons">logout</i>
                                     <p class="d-lg-none d-md-block">
-                                        Stats
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link" href="javscript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-icons">notifications</i>
-                                    <span class="notification">5</span>
-                                    <p class="d-lg-none d-md-block">
-                                        Some Actions
-                                    </p>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="javascript:void(0)">Mike John responded to your email</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">You have 5 new tasks</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">You're now friend with Andrew</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">Another Notification</a>
-                                    <a class="dropdown-item" href="javascript:void(0)">Another One</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)">
-                                    <i class="material-icons">person</i>
-                                    <p class="d-lg-none d-md-block">
-                                        Account
+                                        Log Out
                                     </p>
                                 </a>
                             </li>
@@ -231,33 +181,14 @@ if (isset($_GET['hapus'])) {
             </div>
             <footer class="footer">
                 <div class="container-fluid">
-                    <nav class="float-left">
-                        <ul>
-                            <li>
-                                <a href="https://www.creative-tim.com">
-                                    Creative Tim
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://creative-tim.com/presentation">
-                                    About Us
-                                </a>
-                            </li>
-                            <li>
-                                <a href="http://blog.creative-tim.com">
-                                    Blog
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.creative-tim.com/license">
-                                    Licenses
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="copyright float-right" id="date">
-                        , made with <i class="material-icons">favorite</i> by
-                        <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="text-center">
+                                2021, made by Kelompok 9
+                            </h5>
+                        </div>
                     </div>
                 </div>
             </footer>
