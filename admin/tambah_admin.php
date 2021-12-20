@@ -2,6 +2,10 @@
 
 session_start();
 
+if ($_SESSION['role'] != "Admin") {
+    header("location:../");
+}
+
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['tambah_admin'])) {

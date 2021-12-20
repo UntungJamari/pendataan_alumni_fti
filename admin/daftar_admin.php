@@ -1,17 +1,25 @@
-<!--
-=========================================================
-* Material Dashboard Dark Edition - v2.1.0
-=========================================================
+<?php
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-dark
-* Copyright 2019 Creative Tim (http://www.creative-tim.com)
+session_start();
 
-* Coded by www.creative-tim.com
+if ($_SESSION['role'] != "Admin") {
+    header("location:../");
+}
 
-=========================================================
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
+if (isset($_GET['hapus'])) {
+
+    $nip = $_GET['hapus'];
+    $query = mysqli_query($koneksi, "delete from user where nim_nip='$nip';");
+    if ($query) {
+        $berhasil = "Berhasil Menghapus Data Admin!!!";
+    } else {
+        $gagal = "Berhasil Menghapus Data Admin!!!";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -168,6 +176,18 @@
                                     <h4 class="card-title ">Daftar Admin</h4>
                                 </div>
                                 <div class="card-body">
+                                    <?php
+                                    if (isset($gagal)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
+                                    <?php
+                                    }
+                                    if (isset($berhasil)) {
+                                    ?>
+                                        <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
+                                    <?php
+                                    }
+                                    ?>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead class=" text-primary">
@@ -179,7 +199,7 @@
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
+
                                                 $query = mysqli_query($koneksi, "select * from user, staf_fakultas where user.nim_nip=staf_fakultas.nip");
 
                                                 while ($tampil = mysqli_fetch_array($query)) {
@@ -191,7 +211,7 @@
                                                         <td>
                                                             <center>
                                                                 <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>">Edit</a>
-                                                                <a class="btn btn-danger pull-middle btn-sm" href="#">Hapus</a>
+                                                                <a class="btn btn-danger pull-middle btn-sm" href="./daftar_admin.php?hapus=<?php echo $tampil['nip']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')">Hapus</a>
                                                             </center>
                                                         </td>
 
