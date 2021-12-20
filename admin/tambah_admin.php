@@ -71,7 +71,7 @@ if (isset($_POST['tambah_admin'])) {
                         </a>
                     </li>
                     <li class="nav-item active ">
-                        <a class="nav-link" href="./tables.html">
+                        <a class="nav-link" href="./daftar_admin.php">
                             <i class="material-icons">content_paste</i>
                             <p>Admin</p>
                         </a>

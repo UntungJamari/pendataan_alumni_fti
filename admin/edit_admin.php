@@ -1,17 +1,26 @@
-<!--
-=========================================================
-* Material Dashboard Dark Edition - v2.1.0
-=========================================================
+<?php
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-dark
-* Copyright 2019 Creative Tim (http://www.creative-tim.com)
+session_start();
 
-* Coded by www.creative-tim.com
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-=========================================================
+if (isset($_POST['tambah_admin'])) {
+    if (empty($_POST["nip"]) || empty($_POST["nama"])) {
+        $gagal = "Isian Tidak Boleh Kosong!!!";
+    } else {
+        $nip = $_POST['nip'];
+        $nama = $_POST['nama'];
+        $query2 = mysqli_query($koneksi, "update staf_fakultas set nama='$nama' where nip='$nip'");
+        if ($query2) {
+            $berhasil = "Berhasil Mengubah Data Admin!!!";
+        } else {
+            $gagal = "Gagal Mengubah Data Admin!!!";
+        }
+        $_GET['nip'] = $nip;
+    }
+}
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +30,7 @@
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Daftar Admin
+        Edit Data Admin
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -160,48 +169,59 @@
             <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
-                    <a class="btn btn-info pull-middle" href="tambah_admin.php">Tambah Admin</a>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title ">Daftar Admin</h4>
+                                    <h4 class="card-title">Edit Data Admin</h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead class=" text-primary">
-                                                <th>NIP</th>
-                                                <th>Nama</th>
-                                                <th>
-                                                    <center>Aksi</center>
-                                                </th>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
-                                                $query = mysqli_query($koneksi, "select * from user, staf_fakultas where user.nim_nip=staf_fakultas.nip");
+                                    <?php
+                                    if (isset($gagal)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
+                                    <?php
+                                    }
+                                    if (isset($berhasil)) {
+                                    ?>
+                                        <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
+                                    <?php
+                                    }
 
-                                                while ($tampil = mysqli_fetch_array($query)) {
+                                    $nip = $_GET['nip'];
 
-                                                ?>
-                                                    <tr>
-                                                        <td><?php echo $tampil['nip']; ?></td>
-                                                        <td><?php echo $tampil['nama']; ?></td>
-                                                        <td>
-                                                            <center>
-                                                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>">Edit</a>
-                                                                <a class="btn btn-danger pull-middle btn-sm" href="#">Hapus</a>
-                                                            </center>
-                                                        </td>
+                                    $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nip'");
+                                    $result = mysqli_fetch_assoc($query);
 
-                                                    </tr>
-                                                <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    ?>
+                                    <form method="POST" action="edit_admin.php">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">NIP</label>
+                                                    <input type="text" class="form-control" name="nip" value="<?php echo $result['nip']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Nama</label>
+                                                    <input type="text" class="form-control" name="nama" value="<?php echo $result['nama']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Password (default : 12345678)</label>
+                                                    <input type="text" class="form-control" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary pull-right mt-5" name="tambah_admin">Simpan</button>
+                                        <div class="clearfix"></div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
