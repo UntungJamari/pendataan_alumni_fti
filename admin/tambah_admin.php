@@ -2,8 +2,24 @@
 
 session_start();
 
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
+
 if (isset($_POST['tambah_admin'])) {
     if (empty($_POST["nip"]) || empty($_POST["nama"])) {
+        $gagal = "Isian Tidak Boleh Kosong!!!";
+    } else {
+        $nip = $_POST['nip'];
+        $nama = $_POST['nama'];
+        $password = "12345678";
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
+        $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama')");
+
+        if (($query) && ($query2)) {
+            $berhasil = "Berhasil Menambahkan Admin!!!";
+        } else {
+            $gagal = "Gagal Menambahkan Admin!!!";
+        }
     }
 }
 
@@ -17,7 +33,7 @@ if (isset($_POST['tambah_admin'])) {
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Daftar Admin
+        Tambah Admin
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -163,6 +179,18 @@ if (isset($_POST['tambah_admin'])) {
                                     <h4 class="card-title">Tambah Admin</h4>
                                 </div>
                                 <div class="card-body">
+                                    <?php
+                                    if (isset($gagal)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
+                                    <?php
+                                    }
+                                    if (isset($berhasil)) {
+                                    ?>
+                                        <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
+                                    <?php
+                                    }
+                                    ?>
                                     <form method="POST" action="tambah_admin.php">
                                         <div class="row">
                                             <div class="col-md-12">
