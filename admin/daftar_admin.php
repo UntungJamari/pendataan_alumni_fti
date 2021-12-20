@@ -39,6 +39,8 @@ if (isset($_GET['hapus'])) {
     <link href="../assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body class="dark-edition">
@@ -119,9 +121,9 @@ if (isset($_GET['hapus'])) {
                         <span class="navbar-toggler-icon icon-bar"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end">
-                        <form class="navbar-form">
+                        <form class="navbar-form" action="daftar_admin.php">
                             <div class="input-group no-border">
-                                <input type="text" value="" class="form-control" placeholder="Search...">
+                                <input type="text" name="cari" class="form-control" placeholder="Cari Admin...">
                                 <button type="submit" class="btn btn-default btn-round btn-just-icon">
                                     <i class="material-icons">search</i>
                                     <div class="ripple-container"></div>
@@ -168,7 +170,7 @@ if (isset($_GET['hapus'])) {
             <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
-                    <a class="btn btn-info pull-middle" href="tambah_admin.php">Tambah Admin</a>
+                    <a class="btn btn-info pull-middle" href="tambah_admin.php"><i class="material-icons">add</i>Tambah Admin</a>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
@@ -189,7 +191,7 @@ if (isset($_GET['hapus'])) {
                                     }
                                     ?>
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover" id="example">
                                             <thead class=" text-primary">
                                                 <th>NIP</th>
                                                 <th>Nama</th>
@@ -210,8 +212,8 @@ if (isset($_GET['hapus'])) {
                                                         <td><?php echo $tampil['nama']; ?></td>
                                                         <td>
                                                             <center>
-                                                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>">Edit</a>
-                                                                <a class="btn btn-danger pull-middle btn-sm" href="./daftar_admin.php?hapus=<?php echo $tampil['nip']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')">Hapus</a>
+                                                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>"><i class="material-icons">edit</i></a>
+                                                                <a class="btn btn-danger pull-middle btn-sm" href="./daftar_admin.php?hapus=<?php echo $tampil['nip']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
                                                             </center>
                                                         </td>
 
@@ -445,6 +447,14 @@ if (isset($_GET['hapus'])) {
 
                 });
             });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
         });
     </script>
 </body>
