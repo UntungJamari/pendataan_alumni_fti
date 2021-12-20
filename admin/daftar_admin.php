@@ -160,7 +160,7 @@
             <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
-                    <a class="btn btn-info pull-middle" href="#">Tambah Admin</a>
+                    <a class="btn btn-info pull-middle" href="tambah_admin.php">Tambah Admin</a>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
