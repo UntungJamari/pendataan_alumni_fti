@@ -200,7 +200,7 @@ if (isset($_GET['hapus'])) {
                                             <tbody>
                                                 <?php
 
-                                                $query = mysqli_query($koneksi, "select * from user, staf_fakultas where user.nim_nip=staf_fakultas.nip");
+                                                $query = mysqli_query($koneksi, "select * from user, staf_fakultas where user.nim_nip=staf_fakultas.nip order by staf_fakultas.nama");
 
                                                 while ($tampil = mysqli_fetch_array($query)) {
 
