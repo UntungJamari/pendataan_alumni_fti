@@ -5,6 +5,9 @@ session_start();
 if ($_SESSION['role'] != "Admin") {
   header("location:../");
 }
+
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,13 +113,31 @@ if ($_SESSION['role'] != "Admin") {
             <div class="col-md-5">
               <h4 class="card-title text-center font-weight-bold">Alumni</h4>
               <p class="card-category">
-              <h1 class="text-success text-center font-weight-bold">10</h1>
+              <h1 class="text-success text-center font-weight-bold">
+                <?php
+
+                $query = mysqli_query($koneksi, "SELECT COUNT(nim) as jumlah FROM alumni");
+                $result = mysqli_fetch_assoc($query);
+                echo $result['jumlah'];
+
+                ?>
+              </h1>
               </p>
             </div>
             <div class="col-md-5">
               <h4 class="card-title text-center font-weight-bold">Mahasiswa</h4>
               <p class="card-category">
-              <h1 class="text-info text-center font-weight-bold">10</h1>
+              <h1 class="text-info text-center font-weight-bold">
+
+                <?php
+
+                $query = mysqli_query($koneksi, "SELECT COUNT(nim) as jumlah FROM mahasiswa");
+                $result = mysqli_fetch_assoc($query);
+                echo $result['jumlah'];
+
+                ?>
+
+              </h1>
               </p>
             </div>
 
