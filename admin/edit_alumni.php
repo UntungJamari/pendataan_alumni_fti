@@ -112,6 +112,13 @@ if (isset($_POST['edit_alumni'])) {
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
               <li class="nav-item">
+                <p class="mt-3">
+                  <?php
+                  echo $_SESSION['nama'];
+                  ?>
+                </p>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
                   <i class="material-icons">logout</i>
                   <p class="d-lg-none d-md-block">
