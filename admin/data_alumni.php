@@ -10,8 +10,8 @@ $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_GET['hapus'])) {
 
-  $nip = $_GET['hapus'];
-  $query = mysqli_query($koneksi, "delete from user where nim_nip='$nip';");
+  $nim = $_GET['hapus'];
+  $query = mysqli_query($koneksi, "delete from user where nim_nip='$nim';");
   if ($query) {
     $berhasil = "Berhasil Menghapus Data Admin!!!";
   } else {
@@ -142,8 +142,9 @@ if (isset($_GET['hapus'])) {
                   <div class="table-responsive">
                     <table class="table table-hover" id="example">
                       <thead class=" text-primary">
-                        <th>NIP</th>
+                        <th>NIM</th>
                         <th>Nama</th>
+                        <th>Jurusan</th>
                         <th>
                           <center>Aksi</center>
                         </th>
@@ -151,18 +152,27 @@ if (isset($_GET['hapus'])) {
                       <tbody>
                         <?php
 
-                        $query = mysqli_query($koneksi, "select * from user, staf_fakultas where user.nim_nip=staf_fakultas.nip order by staf_fakultas.nama");
+                        $query = mysqli_query($koneksi, "select * from alumni order by nama asc");
 
                         while ($tampil = mysqli_fetch_array($query)) {
 
                         ?>
                           <tr>
-                            <td><?php echo $tampil['nip']; ?></td>
+                            <td><?php echo $tampil['nim']; ?></td>
                             <td><?php echo $tampil['nama']; ?></td>
                             <td>
+                              <?php
+                              if ($tampil['kode_jurusan'] == 1) {
+                                echo "Sistem Informasi";
+                              } else {
+                                echo "Teknik Komputer";
+                              }
+                              ?>
+                            </td>
+                            <td>
                               <center>
-                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>"><i class="material-icons">edit</i></a>
-                                <a class="btn btn-danger pull-middle btn-sm" href="./daftar_admin.php?hapus=<?php echo $tampil['nip']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
+                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_alumni.php?nim=<?php echo $tampil['nim']; ?>"><i class="material-icons">edit</i></a>
+                                <a class="btn btn-danger pull-middle btn-sm" href="./data_alumni.php?hapus=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
                               </center>
                             </td>
 
