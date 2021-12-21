@@ -9,15 +9,16 @@ if ($_SESSION['role'] != "Admin") {
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['tambah_admin'])) {
-    if (empty($_POST["nip"]) || empty($_POST["nama"])) {
+    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
         $gagal = "Isian Tidak Boleh Kosong!!!";
     } else {
         $nip = $_POST['nip'];
         $nama = $_POST['nama'];
+        $jenis_kelamin = $_POST["jenis_kelamin"];
         $password = "12345678";
         $password = password_hash($password, PASSWORD_DEFAULT);
         $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
-        $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama')");
+        $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama', '$jenis_kelamin', 'default.jpg')");
 
         if (($query) && ($query2)) {
             $berhasil = "Berhasil Menambahkan Admin!!!";
@@ -112,11 +113,14 @@ if (isset($_POST['tambah_admin'])) {
                     <div class="collapse navbar-collapse justify-content-end">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <p class="mt-3">
-                                    <?php
-                                    echo $_SESSION['nama'];
-                                    ?>
-                                </p>
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                                    <p class="d-lg-none d-md-block">
+                                        <?php
+                                        echo $_SESSION['nama'];
+                                        ?>
+                                    </p>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
@@ -166,6 +170,18 @@ if (isset($_POST['tambah_admin'])) {
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating">Nama</label>
                                                     <input type="text" class="form-control" name="nama">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Jenis Kelamin</label>
+                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                        <option selected>------------------------------</option>
+                                                        <option value="Laki-laki">Laki-laki</option>
+                                                        <option value="Perempuan">Perempuan</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>

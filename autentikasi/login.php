@@ -23,6 +23,7 @@ if (isset($_POST['login'])) {
                     $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nim_nip'");
                     $result = mysqli_fetch_assoc($query);
                     $_SESSION['nama'] = $result["nama"];
+                    $_SESSION['foto'] = $result["foto"];
                     header("location:../admin/dashboard.php");
                 }
                 if ($result['role'] == "User_Mahasiswa") {

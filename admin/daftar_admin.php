@@ -105,11 +105,14 @@ if (isset($_GET['hapus'])) {
                     <div class="collapse navbar-collapse justify-content-end">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <p class="mt-3">
-                                    <?php
-                                    echo $_SESSION['nama'];
-                                    ?>
-                                </p>
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                                    <p class="d-lg-none d-md-block">
+                                        <?php
+                                        echo $_SESSION['nama'];
+                                        ?>
+                                    </p>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
@@ -151,6 +154,8 @@ if (isset($_GET['hapus'])) {
                                             <thead class=" text-primary">
                                                 <th>NIP</th>
                                                 <th>Nama</th>
+                                                <th>Jenis Kelamin</th>
+                                                <th>Foto</th>
                                                 <th>
                                                     <center>Aksi</center>
                                                 </th>
@@ -166,6 +171,8 @@ if (isset($_GET['hapus'])) {
                                                     <tr>
                                                         <td><?php echo $tampil['nip']; ?></td>
                                                         <td><?php echo $tampil['nama']; ?></td>
+                                                        <td><?php echo $tampil['jenis_kelamin']; ?></td>
+                                                        <td><img src="../assets/img/faces/<?php echo $tampil['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></td>
                                                         <td>
                                                             <center>
                                                                 <a class="btn btn-warning pull-middle btn-sm" href="./edit_admin.php?nip=<?php echo $tampil['nip']; ?>"><i class="material-icons">edit</i></a>

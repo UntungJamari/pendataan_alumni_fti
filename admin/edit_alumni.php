@@ -9,14 +9,15 @@ if ($_SESSION['role'] != "Admin") {
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['edit_alumni'])) {
-  if (empty($_POST["nim"]) || empty($_POST["nama"]) || empty($_POST["tanggal_lahir"]) || empty($_POST["jurusan"])) {
+  if (empty($_POST["nim"]) || empty($_POST["nama"]) || empty($_POST["tanggal_lahir"]) || empty($_POST["jurusan"]) || empty($_POST["jenis_kelamin"])) {
     $gagal = "Isian Tidak Boleh Kosong!!!";
   } else {
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
     $kode_jurusan = $_POST['jurusan'];
-    $query = mysqli_query($koneksi, "update alumni set nama='$nama', tanggal_lahir='$tanggal_lahir', kode_jurusan='$kode_jurusan' where nim='$nim'");
+    $jenis_kelamin = $_POST["jenis_kelamin"];
+    $query = mysqli_query($koneksi, "update alumni set nama='$nama', tanggal_lahir='$tanggal_lahir', kode_jurusan='$kode_jurusan', jenis_kelamin='$jenis_kelamin' where nim='$nim'");
 
     if ($query) {
       $berhasil = "Berhasil Mengubah Data Alumni!!!";
@@ -112,11 +113,14 @@ if (isset($_POST['edit_alumni'])) {
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <p class="mt-3">
-                  <?php
-                  echo $_SESSION['nama'];
-                  ?>
-                </p>
+                <a class="nav-link" href="javascript:void(0)">
+                  <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                  <p class="d-lg-none d-md-block">
+                    <?php
+                    echo $_SESSION['nama'];
+                    ?>
+                  </p>
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
@@ -185,7 +189,7 @@ if (isset($_POST['edit_alumni'])) {
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Jurusan</label>
                           <select class="form-select mt-2" aria-label="Default select example" name="jurusan">
@@ -199,6 +203,28 @@ if (isset($_POST['edit_alumni'])) {
                               <option value="2" selected>Teknik Komputer</option>
                             <?php
                             }
+                            ?>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Jenis Kelamin</label>
+                          <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                            <?php
+
+                            if ($result['jenis_kelamin'] == 'Laki-laki') {
+                            ?>
+                              <option value="Laki-laki" selected>Laki-laki</option>
+                              <option value="Perempuan">Perempuan</option>
+                            <?php
+                            } else {
+                            ?>
+                              <option value="Laki-laki">Laki-laki</option>
+                              <option value="Perempuan" selected>Perempuan</option>
+                            <?php
+                            }
+
                             ?>
                           </select>
                         </div>

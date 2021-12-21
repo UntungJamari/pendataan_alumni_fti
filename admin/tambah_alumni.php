@@ -9,17 +9,18 @@ if ($_SESSION['role'] != "Admin") {
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['tambah_alumni'])) {
-  if (empty($_POST["nim"]) || empty($_POST["nama"]) || empty($_POST["tanggal_lahir"]) || empty($_POST["jurusan"])) {
+  if (empty($_POST["nim"]) || empty($_POST["nama"]) || empty($_POST["tanggal_lahir"]) || empty($_POST["jurusan"]) || empty($_POST["jenis_kelamin"])) {
     $gagal = "Isian Tidak Boleh Kosong!!!";
   } else {
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
     $kode_jurusan = $_POST['jurusan'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
     $password = "12345678";
     $password = password_hash($password, PASSWORD_DEFAULT);
     $query = mysqli_query($koneksi, "insert into user values ('$nim', '$password', 'User Alumni')");
-    $query2 = mysqli_query($koneksi, "insert into alumni (nim, nama, tanggal_lahir, kode_jurusan) values ('$nim', '$nama', '$tanggal_lahir', '$kode_jurusan')");
+    $query2 = mysqli_query($koneksi, "insert into alumni (nim, nama, tanggal_lahir, kode_jurusan, jenis_kelamin, foto) values ('$nim', '$nama', '$tanggal_lahir', '$kode_jurusan','$jenis_kelamin','default.jpg')");
 
     if (($query) && ($query2)) {
       $berhasil = "Berhasil Menambahkan Alumni!!!";
@@ -114,11 +115,14 @@ if (isset($_POST['tambah_alumni'])) {
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <p class="mt-3">
-                  <?php
-                  echo $_SESSION['nama'];
-                  ?>
-                </p>
+                <a class="nav-link" href="javascript:void(0)">
+                  <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                  <p class="d-lg-none d-md-block">
+                    <?php
+                    echo $_SESSION['nama'];
+                    ?>
+                  </p>
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
@@ -180,13 +184,23 @@ if (isset($_POST['tambah_alumni'])) {
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Jurusan</label>
                           <select class="form-select mt-2" aria-label="Default select example" name="jurusan">
                             <option selected>------------------------------</option>
                             <option value="1">Sistem Informasi</option>
                             <option value="2">Teknik Komputer</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Jenis Kelamin</label>
+                          <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                            <option selected>------------------------------</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
                           </select>
                         </div>
                       </div>

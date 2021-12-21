@@ -9,12 +9,14 @@ if ($_SESSION['role'] != "Admin") {
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['tambah_admin'])) {
-    if (empty($_POST["nip"]) || empty($_POST["nama"])) {
+    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
         $gagal = "Isian Tidak Boleh Kosong!!!";
     } else {
         $nip = $_POST['nip'];
         $nama = $_POST['nama'];
-        $query2 = mysqli_query($koneksi, "update staf_fakultas set nama='$nama' where nip='$nip'");
+        $jenis_kelamin = $_POST["jenis_kelamin"];
+
+        $query2 = mysqli_query($koneksi, "update staf_fakultas set nama='$nama', jenis_kelamin='$jenis_kelamin' where nip='$nip'");
         if ($query2) {
             $berhasil = "Berhasil Mengubah Data Admin!!!";
         } else {
@@ -109,11 +111,14 @@ if (isset($_POST['tambah_admin'])) {
                     <div class="collapse navbar-collapse justify-content-end">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <p class="mt-3">
-                                    <?php
-                                    echo $_SESSION['nama'];
-                                    ?>
-                                </p>
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                                    <p class="d-lg-none d-md-block">
+                                        <?php
+                                        echo $_SESSION['nama'];
+                                        ?>
+                                    </p>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
@@ -170,6 +175,30 @@ if (isset($_POST['tambah_admin'])) {
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating">Nama</label>
                                                     <input type="text" class="form-control" name="nama" value="<?php echo $result['nama']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Jenis Kelamin</label>
+                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                        <?php
+
+                                                        if ($result['jenis_kelamin'] == 'Laki-laki') {
+                                                        ?>
+                                                            <option value="Laki-laki" selected>Laki-laki</option>
+                                                            <option value="Perempuan">Perempuan</option>
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <option value="Laki-laki">Laki-laki</option>
+                                                            <option value="Perempuan" selected>Perempuan</option>
+                                                        <?php
+                                                        }
+
+                                                        ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
