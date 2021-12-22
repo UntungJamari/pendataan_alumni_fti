@@ -8,15 +8,51 @@ if ($_SESSION['role'] != "Admin") {
 
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-if (isset($_GET['hapus'])) {
-
-    $nim = $_GET['hapus'];
-    $query = mysqli_query($koneksi, "delete from user where nim_nip='$nim';");
-    if ($query) {
-        $berhasil = "Berhasil Menghapus Data Admin!!!";
+if (isset($_POST['edit_profile'])) {
+    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
+        $gagal = "Isian Tidak Boleh Kosong!!!";
     } else {
-        $gagal = "Berhasil Menghapus Data Admin!!!";
+        $nip = $_POST['nip'];
+        $nama = $_POST['nama'];
+        $jenis_kelamin = $_POST["jenis_kelamin"];
+
+        $query2 = mysqli_query($koneksi, "update staf_fakultas set nama='$nama', jenis_kelamin='$jenis_kelamin' where nip='$nip'");
+        if ($query2) {
+            $berhasil = "Berhasil Mengubah Profil!!!";
+        } else {
+            $gagal = "Gagal Mengubah Profil!!!";
+        }
+
+        $image = $_FILES['foto']['name'];
+
+        if (!empty($image)) {
+            $ekstensi_diperbolehkan = array('png', 'jpg', 'jpeg');
+            $image = $_FILES['foto']['name'];
+            $x = explode('.', $image);
+            $ekstensi = strtolower(end($x));
+            $ukuran = $_FILES['foto']['size'];
+            $file_tmp = $_FILES['foto']['tmp_name'];
+
+            if (in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
+                if ($ukuran < 1044070) {
+                    move_uploaded_file($file_tmp, '../assets/img/faces/' . $image);
+                    $query = mysqli_query($koneksi, "update staf_fakultas set foto='$image' where nip='$nip';");
+                    if ($query) {
+                        $berhasil = "Foto Berhasil Diubah";
+
+                        $_SESSION['foto'] = $image;
+                    } else {
+                        $gagal = "Foto Gagal Diubah";
+                    }
+                } else {
+                    $gagal = "Foto Gagal Diubah, Ukuran File Gambar Terlalu Besar";
+                }
+            } else {
+                $gagal = "Foto Gagal Diubah, Ekstensi File Gambar Tidak Diperbolehkan";
+            }
+        }
     }
+    $_GET['nip'] = $nip;
 }
 
 ?>
@@ -29,7 +65,7 @@ if (isset($_GET['hapus'])) {
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Daftar Mahasiswa
+        Edit Profile
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -39,7 +75,6 @@ if (isset($_GET['hapus'])) {
     <link href="../assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body class="dark-edition">
@@ -74,13 +109,13 @@ if (isset($_GET['hapus'])) {
                         </a>
                     </li>
 
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a class="nav-link" href="./data_mahasiswa.php">
                             <i class="material-icons">school</i>
                             <p>Mahasiswa</p>
                         </a>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="./edit_profile.php">
                             <i class="material-icons">manage_accounts</i>
                             <p>Profile</p>
@@ -94,7 +129,7 @@ if (isset($_GET['hapus'])) {
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="javascript:void(0)">Mahasiswa</a>
+                        <a class="navbar-brand" href="javascript:void(0)">Profile</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
                         <span class="sr-only">Toggle navigation</span>
@@ -129,12 +164,11 @@ if (isset($_GET['hapus'])) {
             <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
-                    <a class="btn btn-info pull-middle" href="tambah_mahasiswa.php"><i class="material-icons">add</i>Tambah Mahasiswa</a>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title ">Daftar Mahasiswa</h4>
+                                    <h4 class="card-title"> Edit Profile</h4>
                                 </div>
                                 <div class="card-body">
                                     <?php
@@ -148,57 +182,63 @@ if (isset($_GET['hapus'])) {
                                         <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
                                     <?php
                                     }
+
+                                    $nip = $_SESSION['nip'];
+                                    $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nip'");
+                                    $result = mysqli_fetch_assoc($query);
                                     ?>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover" id="example">
-                                            <thead class=" text-primary">
-                                                <th>NIM</th>
-                                                <th>Nama</th>
-                                                <th>Jurusan</th>
-                                                <th>Tanggal Lahir</th>
-                                                <th>Jenis Kelamin</th>
-                                                <th>Foto</th>
-                                                <th>
-                                                    <center>Aksi</center>
-                                                </th>
-                                            </thead>
-                                            <tbody>
-                                                <?php
+                                    <form method="POST" action="editt_profile.php" enctype="multipart/form-data">
+                                        <div class="row mt-5">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">NIP</label>
+                                                    <input type="text" class="form-control" value="<?php echo $result['nip']; ?>" disabled>
+                                                    <input type="hidden" class="form-control" name="nip" value="<?php echo $result['nip']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Nama</label>
+                                                    <input type="text" class="form-control" name="nama" value="<?php echo $result['nama']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="formFile" class="form-label">Ganti Foto</label>
+                                                <input class="form-control" type="file" name="foto">
+                                                <p style="font-size: 12px; color: #8f8f8f;">*ukuran file maksimal 1 mb dan format file : .jpg, .jpeg, .png</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Jenis Kelamin</label>
+                                                    <select class="custom-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                        <?php
 
-                                                $query = mysqli_query($koneksi, "select * from mahasiswa order by nama asc");
+                                                        if ($result['jenis_kelamin'] == 'Laki-laki') {
+                                                        ?>
+                                                            <option value="Laki-laki" selected>Laki-laki</option>
+                                                            <option value="Perempuan">Perempuan</option>
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <option value="Laki-laki">Laki-laki</option>
+                                                            <option value="Perempuan" selected>Perempuan</option>
+                                                        <?php
+                                                        }
 
-                                                while ($tampil = mysqli_fetch_array($query)) {
-
-                                                ?>
-                                                    <tr>
-                                                        <td><?php echo $tampil['nim']; ?></td>
-                                                        <td><?php echo $tampil['nama']; ?></td>
-                                                        <td>
-                                                            <?php
-                                                            if ($tampil['kode_jurusan'] == 1) {
-                                                                echo "Sistem Informasi";
-                                                            } else {
-                                                                echo "Teknik Komputer";
-                                                            }
-                                                            ?>
-                                                        </td>
-                                                        <td><?php echo $tampil['tanggal_lahir']; ?></td>
-                                                        <td><?php echo $tampil['jenis_kelamin']; ?></td>
-                                                        <td><img src="../assets/img/faces/<?php echo $tampil['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></td>
-                                                        <td>
-                                                            <center>
-                                                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_mahasiswa.php?nim=<?php echo $tampil['nim']; ?>"><i class="material-icons">edit</i></a>
-                                                                <a class="btn btn-danger pull-middle btn-sm" href="./data_mahasiswa.php?hapus=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
-                                                            </center>
-                                                        </td>
-
-                                                    </tr>
-                                                <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary pull-right mt-5" name="edit_profile">Simpan</button>
+                                        <div class="clearfix"></div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -403,13 +443,6 @@ if (isset($_GET['hapus'])) {
 
                 });
             });
-        });
-    </script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
         });
     </script>
 </body>

@@ -1,10 +1,41 @@
+<?php
+
+session_start();
+
+if ($_SESSION['role'] != "Admin") {
+  header("location:../");
+}
+
+$koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
+
+if (isset($_POST['tambah_admin'])) {
+  if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
+    $gagal = "Isian Tidak Boleh Kosong!!!";
+  } else {
+    $nip = $_POST['nip'];
+    $nama = $_POST['nama'];
+    $jenis_kelamin = $_POST["jenis_kelamin"];
+    $password = "12345678";
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
+    $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama', '$jenis_kelamin', 'default.jpg')");
+
+    if (($query) && ($query2)) {
+      $berhasil = "Berhasil Menambahkan Admin!!!";
+    } else {
+      $gagal = "Gagal Menambahkan Admin!!!";
+    }
+  }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
     Profile
@@ -27,60 +58,42 @@
 
         Tip 2: you can also add an image using data-image tag
     -->
-      <div class="logo"><a href="http://www.creative-tim.com" class="simple-text logo-normal">
-      Pendataan Alumni FTI
+      <div class="logo"><a href="javascript:void(0)" class="simple-text logo-normal">
+          Pendataan Alumni FTI
         </a></div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item  ">
+          <li class="nav-item ">
             <a class="nav-link" href="./dashboard.php">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item ">
+            <a class="nav-link" href="./daftar_admin.php">
+              <i class="material-icons">admin_panel_settings</i>
+              <p>Admin</p>
+            </a>
+          </li>
+          <li class="nav-item ">
             <a class="nav-link" href="./data_alumni.php">
-              <i class="material-icons">content_paste</i>
+              <i class="material-icons">person</i>
               <p>Alumni</p>
             </a>
           </li>
+
+          <li class="nav-item ">
+            <a class="nav-link" href="./data_mahasiswa.php">
+              <i class="material-icons">school</i>
+              <p>Mahasiswa</p>
+            </a>
+          </li>
           <li class="nav-item active">
-            <a class="nav-link" href="./user.html">
-              <i class="material-icons">person</i>
+            <a class="nav-link" href="./edit_profile.php">
+              <i class="material-icons">manage_accounts</i>
               <p>Profile</p>
             </a>
           </li>
-          
-          <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
-              <i class="material-icons">library_books</i>
-              <p>Typography</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./icons.html">
-              <i class="material-icons">bubble_chart</i>
-              <p>Icons</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./map.html">
-              <i class="material-icons">location_ons</i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./notifications.html">
-              <i class="material-icons">notifications</i>
-              <p>Notifications</p>
-            </a>
-          </li>
-          <!-- <li class="nav-item active-pro ">
-                <a class="nav-link" href="./upgrade.html">
-                    <i class="material-icons">unarchive</i>
-                    <p>Upgrade to PRO</p>
-                </a>
-            </li> -->
         </ul>
       </div>
     </div>
@@ -98,45 +111,22 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <button type="submit" class="btn btn-default btn-round btn-just-icon">
-                  <i class="material-icons">search</i>
-                  <div class="ripple-container"></div>
-                </button>
-              </div>
-            </form>
             <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" href="javascript:void(0)">
-                  <i class="material-icons">dashboard</i>
+                  <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
                   <p class="d-lg-none d-md-block">
-                    Stats
+                    <?php
+                    echo $_SESSION['nama'];
+                    ?>
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="javscript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
-                  <p class="d-lg-none d-md-block">
-                    Some Actions
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="javascript:void(0)">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="javascript:void(0)">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="javascript:void(0)">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="javascript:void(0)">Another Notification</a>
-                  <a class="dropdown-item" href="javascript:void(0)">Another One</a>
-                </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="javascript:void(0)">
-                  <i class="material-icons">person</i>
+                <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
+                  <i class="material-icons">logout</i>
                   <p class="d-lg-none d-md-block">
-                    Account
+                    Log Out
                   </p>
                 </a>
               </li>
@@ -147,143 +137,81 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
+          <a class="btn btn-warning" href="ganti_password.php">Ganti Password</a><a class="btn btn-warning" href="editt_profile.php">Edit Profile</a>
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Edit Profile</h4>
-                  <p class="card-category">Isi data dengan benar</p>
+                  <h4 class="card-title">Profile</h4>
                 </div>
                 <div class="card-body">
-                  <form>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Nama Lengkap</label>
-                          <input type="text" class="form-control" >
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">NIM</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Jurusan</label>
-                          <input type="email" class="form-control">
-                        </div>
-                      </div>
+                  <?php
+                  if (isset($gagal)) {
+                  ?>
+                    <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
+                  <?php
+                  }
+                  if (isset($berhasil)) {
+                  ?>
+                    <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
+                  <?php
+                  }
+
+                  $nip = $_SESSION['nip'];
+                  $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nip'");
+                  $result = mysqli_fetch_assoc($query);
+                  ?>
+                  <div class="card card-profile pull-middle mt-5">
+                    <div class="card-avatar">
+                      <img src="../assets/img/faces/<?php echo $result['foto']; ?>" style="width: 150px; height: 150px; border-radius: 30px;">
                     </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Nama Organisasi</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Jabatan</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Sosial Media</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Instansi</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">IPK</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Judul TA</label>
-                          <input type="text" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label>Alamat</label>
-                          <div class="form-group">
-                            <label class="bmd-label-floating"> </label>
-                            <textarea class="form-control" rows="5"></textarea>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary pull-right">Simpan</button>
-                    <div class="clearfix"></div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="col-md-4">
-              <div class="card card-profile">
-                <div class="card-avatar">
-                  <a href="#pablo">
-                    <img class="img" src="../assets/img/faces/marc.jpg" />
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h6 class="card-category">CEO / Co-Founder</h6>
-                  <h4 class="card-title">Alec Thompson</h4>
-                  <p class="card-description">
-                    Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                  </p>
-                  <a href="#pablo" class="btn btn-primary btn-round">Follow</a>
+                    <center>
+                      <br>
+                      <table style="font-size: 20px; color: lightgray;">
+                        <tr>
+                          <td class="font-weight-bold">
+                            NIP
+                          </td>
+                          <td>
+                            : <?php echo $result['nip']; ?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="font-weight-bold">
+                            Nama
+                          </td>
+                          <td>
+                            : <?php echo $result['nama']; ?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="font-weight-bold">
+                            Jenis Kelamin
+                          </td>
+                          <td>
+                            : <?php echo $result['jenis_kelamin']; ?>
+                          </td>
+                        </tr>
+                      </table>
+                      <br>
+                    </center>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
       <footer class="footer">
         <div class="container-fluid">
-          <nav class="float-left">
-            <ul>
-              <li>
-                <a href="https://www.creative-tim.com">
-                  Creative Tim
-                </a>
-              </li>
-              <li>
-                <a href="https://creative-tim.com/presentation">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="http://blog.creative-tim.com">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="https://www.creative-tim.com/license">
-                  Licenses
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright float-right" id="date">
-            , made with <i class="material-icons">favorite</i> by
-            <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+          <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-12">
+              <h5 class="text-center">
+                2021, made by Kelompok 9
+              </h5>
+            </div>
           </div>
         </div>
       </footer>
@@ -292,73 +220,6 @@
         let date = document.getElementById('date');
         date.innerHTML = '&copy; ' + x + date.innerHTML;
       </script>
-    </div>
-  </div>
-  <div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-      <a href="#" data-toggle="dropdown">
-        <i class="fa fa-cog fa-2x"> </i>
-      </a>
-      <ul class="dropdown-menu">
-        <li class="header-title"> Sidebar Filters</li>
-        <li class="adjustments-line">
-          <a href="javascript:void(0)" class="switch-trigger active-color">
-            <div class="badge-colors ml-auto mr-auto">
-              <span class="badge filter badge-purple active" data-color="purple"></span>
-              <span class="badge filter badge-azure" data-color="azure"></span>
-              <span class="badge filter badge-green" data-color="green"></span>
-              <span class="badge filter badge-warning" data-color="orange"></span>
-              <span class="badge filter badge-danger" data-color="danger"></span>
-            </div>
-            <div class="clearfix"></div>
-          </a>
-        </li>
-        <li class="header-title">Images</li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-1.jpg" alt="">
-          </a>
-        </li>
-        <li class="active">
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-2.jpg" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-3.jpg" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-4.jpg" alt="">
-          </a>
-        </li>
-        <li class="button-container">
-          <a href="https://www.creative-tim.com/product/material-dashboard-dark" target="_blank" class="btn btn-primary btn-block">Free Download</a>
-        </li>
-        <!-- <li class="header-title">Want more components?</li>
-            <li class="button-container">
-                <a href="https://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-warning btn-block">
-                  Get the pro version
-                </a>
-            </li> -->
-        <li class="button-container">
-          <a href="https://demos.creative-tim.com/material-dashboard-dark/docs/2.0/getting-started/introduction.html" target="_blank" class="btn btn-default btn-block">
-            View Documentation
-          </a>
-        </li>
-        <li class="button-container github-star">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard/tree/dark-edition" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-        </li>
-        <li class="header-title">Thank you for 95 shares!</li>
-        <li class="button-container text-center">
-          <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-          <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-          <br>
-          <br>
-        </li>
-      </ul>
     </div>
   </div>
   <!--   Core JS Files   -->
