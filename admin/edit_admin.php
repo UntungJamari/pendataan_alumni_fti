@@ -179,10 +179,10 @@ if (isset($_POST['tambah_admin'])) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Jenis Kelamin</label>
-                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                    <select class="custom-select mt-2" aria-label="Default select example" name="jenis_kelamin">
                                                         <?php
 
                                                         if ($result['jenis_kelamin'] == 'Laki-laki') {
@@ -199,14 +199,6 @@ if (isset($_POST['tambah_admin'])) {
 
                                                         ?>
                                                     </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">Password (default : 12345678)</label>
-                                                    <input type="text" class="form-control" disabled>
                                                 </div>
                                             </div>
                                         </div>

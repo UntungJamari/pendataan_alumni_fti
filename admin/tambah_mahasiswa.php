@@ -187,7 +187,7 @@ if (isset($_POST['tambah_mahasiswa'])) {
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Jurusan</label>
-                                                    <select class="form-select mt-2" aria-label="Default select example" name="jurusan">
+                                                    <select class="custom-select mt-2" aria-label="Default select example" name="jurusan">
                                                         <option selected>------------------------------</option>
                                                         <option value="1">Sistem Informasi</option>
                                                         <option value="2">Teknik Komputer</option>
@@ -197,7 +197,7 @@ if (isset($_POST['tambah_mahasiswa'])) {
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Jenis Kelamin</label>
-                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                    <select class="custom-select mt-2" aria-label="Default select example" name="jenis_kelamin">
                                                         <option selected>------------------------------</option>
                                                         <option value="Laki-laki">Laki-laki</option>
                                                         <option value="Perempuan">Perempuan</option>

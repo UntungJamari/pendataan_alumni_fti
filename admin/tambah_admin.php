@@ -174,10 +174,10 @@ if (isset($_POST['tambah_admin'])) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Jenis Kelamin</label>
-                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                                                    <select class="custom-select mt-2" aria-label="Default select example" name="jenis_kelamin">
                                                         <option selected>------------------------------</option>
                                                         <option value="Laki-laki">Laki-laki</option>
                                                         <option value="Perempuan">Perempuan</option>

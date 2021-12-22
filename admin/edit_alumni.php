@@ -192,7 +192,7 @@ if (isset($_POST['edit_alumni'])) {
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Jurusan</label>
-                          <select class="form-select mt-2" aria-label="Default select example" name="jurusan">
+                          <select class="custom-select mt-2" aria-label="Default select example" name="jurusan">
                             <?php
                             if ($result['kode_jurusan'] == '1') { ?>
                               <option value="1" selected>Sistem Informasi</option>
@@ -210,7 +210,7 @@ if (isset($_POST['edit_alumni'])) {
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="form-label">Jenis Kelamin</label>
-                          <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
+                          <select class="custom-select mt-2" aria-label="Default select example" name="jenis_kelamin">
                             <?php
 
                             if ($result['jenis_kelamin'] == 'Laki-laki') {
@@ -227,14 +227,6 @@ if (isset($_POST['edit_alumni'])) {
 
                             ?>
                           </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Password (default : 12345678)</label>
-                          <input type="text" class="form-control" disabled>
                         </div>
                       </div>
                     </div>
