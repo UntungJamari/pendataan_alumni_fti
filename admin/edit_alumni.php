@@ -83,7 +83,7 @@ if (isset($_POST['edit_alumni'])) {
           </li>
 
           <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
+            <a class="nav-link" href="./data_mahasiswa.php">
               <i class="material-icons">school</i>
               <p>Mahasiswa</p>
             </a>
@@ -141,7 +141,7 @@ if (isset($_POST['edit_alumni'])) {
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Edit Alumni Alumni</h4>
+                  <h4 class="card-title">Edit Alumni</h4>
                 </div>
                 <div class="card-body">
                   <?php

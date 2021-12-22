@@ -8,22 +8,24 @@ if ($_SESSION['role'] != "Admin") {
 
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-if (isset($_POST['tambah_admin'])) {
-    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
+if (isset($_POST['tambah_mahasiswa'])) {
+    if (empty($_POST["nim"]) || empty($_POST["nama"]) || empty($_POST["tanggal_lahir"]) || empty($_POST["jurusan"]) || empty($_POST["jenis_kelamin"])) {
         $gagal = "Isian Tidak Boleh Kosong!!!";
     } else {
-        $nip = $_POST['nip'];
+        $nim = $_POST['nim'];
         $nama = $_POST['nama'];
-        $jenis_kelamin = $_POST["jenis_kelamin"];
+        $tanggal_lahir = $_POST['tanggal_lahir'];
+        $kode_jurusan = $_POST['jurusan'];
+        $jenis_kelamin = $_POST['jenis_kelamin'];
         $password = "12345678";
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
-        $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama', '$jenis_kelamin', 'default.jpg')");
+        $query = mysqli_query($koneksi, "insert into user values ('$nim', '$password', 'User Mahasiswa')");
+        $query2 = mysqli_query($koneksi, "insert into mahasiswa (nim, nama, tanggal_lahir, kode_jurusan, jenis_kelamin, foto) values ('$nim', '$nama', '$tanggal_lahir', '$kode_jurusan','$jenis_kelamin','default.jpg')");
 
         if (($query) && ($query2)) {
-            $berhasil = "Berhasil Menambahkan Admin!!!";
+            $berhasil = "Berhasil Menambahkan Mahasiswa!!!";
         } else {
-            $gagal = "Gagal Menambahkan Admin!!!";
+            $gagal = "Gagal Menambahkan Mahasiswa!!!";
         }
     }
 }
@@ -38,7 +40,7 @@ if (isset($_POST['tambah_admin'])) {
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Tambah Admin
+        Tambah Mahasiswa
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -69,7 +71,7 @@ if (isset($_POST['tambah_admin'])) {
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a class="nav-link" href="./daftar_admin.php">
                             <i class="material-icons">admin_panel_settings</i>
                             <p>Admin</p>
@@ -82,7 +84,7 @@ if (isset($_POST['tambah_admin'])) {
                         </a>
                     </li>
 
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="./data_mahasiswa.php">
                             <i class="material-icons">school</i>
                             <p>Mahasiswa</p>
@@ -102,7 +104,7 @@ if (isset($_POST['tambah_admin'])) {
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="javascript:void(0)">Admin</a>
+                        <a class="navbar-brand" href="javascript:void(0)">Mahasiswa</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
                         <span class="sr-only">Toggle navigation</span>
@@ -141,7 +143,7 @@ if (isset($_POST['tambah_admin'])) {
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title">Tambah Admin</h4>
+                                    <h4 class="card-title">Tambah Mahasiswa</h4>
                                 </div>
                                 <div class="card-body">
                                     <?php
@@ -156,12 +158,12 @@ if (isset($_POST['tambah_admin'])) {
                                     <?php
                                     }
                                     ?>
-                                    <form method="POST" action="tambah_admin.php">
+                                    <form method="POST" action="tambah_mahasiswa.php">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="bmd-label-floating">NIP</label>
-                                                    <input type="text" class="form-control" name="nip">
+                                                    <label class="bmd-label-floating">NIM</label>
+                                                    <input type="text" class="form-control" name="nim">
                                                 </div>
                                             </div>
                                         </div>
@@ -175,6 +177,24 @@ if (isset($_POST['tambah_admin'])) {
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Tanggal Lahir</label>
+                                                    <input type="date" class="form-control" name="tanggal_lahir">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Jurusan</label>
+                                                    <select class="form-select mt-2" aria-label="Default select example" name="jurusan">
+                                                        <option selected>------------------------------</option>
+                                                        <option value="1">Sistem Informasi</option>
+                                                        <option value="2">Teknik Komputer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Jenis Kelamin</label>
                                                     <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
@@ -193,7 +213,7 @@ if (isset($_POST['tambah_admin'])) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary pull-right mt-5" name="tambah_admin">Simpan</button>
+                                        <button type="submit" class="btn btn-primary pull-right mt-5" name="tambah_mahasiswa">Simpan</button>
                                         <div class="clearfix"></div>
                                     </form>
                                 </div>

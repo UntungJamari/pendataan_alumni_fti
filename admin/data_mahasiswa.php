@@ -8,23 +8,14 @@ if ($_SESSION['role'] != "Admin") {
 
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-if (isset($_POST['tambah_admin'])) {
-    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
-        $gagal = "Isian Tidak Boleh Kosong!!!";
-    } else {
-        $nip = $_POST['nip'];
-        $nama = $_POST['nama'];
-        $jenis_kelamin = $_POST["jenis_kelamin"];
-        $password = "12345678";
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
-        $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama', '$jenis_kelamin', 'default.jpg')");
+if (isset($_GET['hapus'])) {
 
-        if (($query) && ($query2)) {
-            $berhasil = "Berhasil Menambahkan Admin!!!";
-        } else {
-            $gagal = "Gagal Menambahkan Admin!!!";
-        }
+    $nim = $_GET['hapus'];
+    $query = mysqli_query($koneksi, "delete from user where nim_nip='$nim';");
+    if ($query) {
+        $berhasil = "Berhasil Menghapus Data Admin!!!";
+    } else {
+        $gagal = "Berhasil Menghapus Data Admin!!!";
     }
 }
 
@@ -38,7 +29,7 @@ if (isset($_POST['tambah_admin'])) {
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Tambah Admin
+        Daftar Mahasiswa
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -48,6 +39,7 @@ if (isset($_POST['tambah_admin'])) {
     <link href="../assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body class="dark-edition">
@@ -69,7 +61,7 @@ if (isset($_POST['tambah_admin'])) {
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a class="nav-link" href="./daftar_admin.php">
                             <i class="material-icons">admin_panel_settings</i>
                             <p>Admin</p>
@@ -82,7 +74,7 @@ if (isset($_POST['tambah_admin'])) {
                         </a>
                     </li>
 
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="./data_mahasiswa.php">
                             <i class="material-icons">school</i>
                             <p>Mahasiswa</p>
@@ -102,7 +94,7 @@ if (isset($_POST['tambah_admin'])) {
             <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
-                        <a class="navbar-brand" href="javascript:void(0)">Admin</a>
+                        <a class="navbar-brand" href="javascript:void(0)">Mahasiswa</a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
                         <span class="sr-only">Toggle navigation</span>
@@ -137,11 +129,12 @@ if (isset($_POST['tambah_admin'])) {
             <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
+                    <a class="btn btn-info pull-middle" href="tambah_mahasiswa.php"><i class="material-icons">add</i>Tambah Mahasiswa</a>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header card-header-primary">
-                                    <h4 class="card-title">Tambah Admin</h4>
+                                    <h4 class="card-title ">Daftar Mahasiswa</h4>
                                 </div>
                                 <div class="card-body">
                                     <?php
@@ -156,46 +149,54 @@ if (isset($_POST['tambah_admin'])) {
                                     <?php
                                     }
                                     ?>
-                                    <form method="POST" action="tambah_admin.php">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">NIP</label>
-                                                    <input type="text" class="form-control" name="nip">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">Nama</label>
-                                                    <input type="text" class="form-control" name="nama">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="form-label">Jenis Kelamin</label>
-                                                    <select class="form-select mt-2" aria-label="Default select example" name="jenis_kelamin">
-                                                        <option selected>------------------------------</option>
-                                                        <option value="Laki-laki">Laki-laki</option>
-                                                        <option value="Perempuan">Perempuan</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">Password (default : 12345678)</label>
-                                                    <input type="text" class="form-control" disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary pull-right mt-5" name="tambah_admin">Simpan</button>
-                                        <div class="clearfix"></div>
-                                    </form>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="example">
+                                            <thead class=" text-primary">
+                                                <th>NIM</th>
+                                                <th>Nama</th>
+                                                <th>Jurusan</th>
+                                                <th>Jenis Kelamin</th>
+                                                <th>Foto</th>
+                                                <th>
+                                                    <center>Aksi</center>
+                                                </th>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                $query = mysqli_query($koneksi, "select * from mahasiswa order by nama asc");
+
+                                                while ($tampil = mysqli_fetch_array($query)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><?php echo $tampil['nim']; ?></td>
+                                                        <td><?php echo $tampil['nama']; ?></td>
+                                                        <td>
+                                                            <?php
+                                                            if ($tampil['kode_jurusan'] == 1) {
+                                                                echo "Sistem Informasi";
+                                                            } else {
+                                                                echo "Teknik Komputer";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td><?php echo $tampil['jenis_kelamin']; ?></td>
+                                                        <td><img src="../assets/img/faces/<?php echo $tampil['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></td>
+                                                        <td>
+                                                            <center>
+                                                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_mahasiswa.php?nim=<?php echo $tampil['nim']; ?>"><i class="material-icons">edit</i></a>
+                                                                <a class="btn btn-danger pull-middle btn-sm" href="./data_mahasiswa.php?hapus=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
+                                                            </center>
+                                                        </td>
+
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -400,6 +401,13 @@ if (isset($_POST['tambah_admin'])) {
 
                 });
             });
+        });
+    </script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
         });
     </script>
 </body>

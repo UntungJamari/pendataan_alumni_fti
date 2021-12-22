@@ -75,7 +75,7 @@ if (isset($_GET['hapus'])) {
                     </li>
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="./typography.html">
+                        <a class="nav-link" href="./data_mahasiswa.php">
                             <i class="material-icons">school</i>
                             <p>Mahasiswa</p>
                         </a>

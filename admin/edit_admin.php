@@ -81,7 +81,7 @@ if (isset($_POST['tambah_admin'])) {
                     </li>
 
                     <li class="nav-item ">
-                        <a class="nav-link" href="./typography.html">
+                        <a class="nav-link" href="./data_mahasiswa.php">
                             <i class="material-icons">school</i>
                             <p>Mahasiswa</p>
                         </a>
