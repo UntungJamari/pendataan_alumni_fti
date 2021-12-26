@@ -2,54 +2,23 @@
 
 session_start();
 
+if ($_SESSION['role'] != "User_Alumni") {
+    header("location:../");
+}
+
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
-if (isset($_POST['login'])) {
-    if (empty($_POST["nim_nip"]) || empty($_POST["password"])) {
-        $gagal = "Input tidak valid!!!";
-    } else {
-        $nim_nip = mysqli_real_escape_string($koneksi, $_POST["nim_nip"]);
-        $password = mysqli_real_escape_string($koneksi, $_POST["password"]);
+if (isset($_GET['hapus'])) {
 
-        $query = mysqli_query($koneksi, "select * from user WHERE nim_nip = '$nim_nip'");
-        if (mysqli_affected_rows($koneksi) == 0) {
-            $gagal = "Log In Gagal!!!";
-        } else {
-            $result = mysqli_fetch_assoc($query);
-            if (password_verify($password, $result["password"])) {
-                if ($result['role'] == "Admin") {
-                    $_SESSION['nip'] = $nim_nip;
-                    $_SESSION['role'] = "Admin";
-                    $query = mysqli_query($koneksi, "select * from staf_fakultas WHERE nip = '$nim_nip'");
-                    $result = mysqli_fetch_assoc($query);
-                    $_SESSION['nama'] = $result["nama"];
-                    $_SESSION['foto'] = $result["foto"];
-                    header("location:../admin/dashboard.php");
-                }
-                if ($result['role'] == "User_Mahasiswa") {
-                    $_SESSION['nim'] = $nim_nip;
-                    $_SESSION['role'] = "User_Mahasiswa";
-                    $query = mysqli_query($koneksi, "select * from mahasiswa WHERE nim = '$nim_nip'");
-                    $result = mysqli_fetch_assoc($query);
-                    $_SESSION['nama'] = $result["nama"];
-                    $_SESSION['foto'] = $result["foto"];
-                    header("location:../user/mahasiswa/dashboard.php");
-                }
-                if ($result['role'] == "User Alumni") {
-                    $_SESSION['nim'] = $nim_nip;
-                    $_SESSION['role'] = "User_Alumni";
-                    $query = mysqli_query($koneksi, "select * from alumni WHERE nim = '$nim_nip'");
-                    $result = mysqli_fetch_assoc($query);
-                    $_SESSION['nama'] = $result["nama"];
-                    $_SESSION['foto'] = $result["foto"];
-                    header("location:../alumni/dashboard.php");
-                }
-            } else {
-                $gagal = "Log In Gagal!!!";
-            }
-        }
+    $nim = $_GET['hapus'];
+    $query = mysqli_query($koneksi, "delete from user where nim_nip='$nim';");
+    if ($query) {
+        $berhasil = "Berhasil Menghapus Data Admin!!!";
+    } else {
+        $gagal = "Berhasil Menghapus Data Admin!!!";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +29,7 @@ if (isset($_POST['login'])) {
     <link rel="icon" type="image/png" href="../assets/img/logo_unand.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Log In
+        Daftar Mahasiswa
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -70,84 +39,175 @@ if (isset($_POST['login'])) {
     <link href="../assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body class="dark-edition">
-    <div class="content mt-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
+    <div class="wrapper ">
+        <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-2.jpg">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+            <div class="logo"><a href="javascript:void(0)" class="simple-text logo-normal">
+                    Pendataan Alumni FTI
+                </a></div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./dashboard.php">
+                            <i class="material-icons">dashboard</i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./data_alumni.php">
+                            <i class="material-icons">person</i>
+                            <p>Alumni</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./data_mahasiswa.php">
+                            <i class="material-icons">school</i>
+                            <p>Mahasiswa</p>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./edit_profile.php">
+                            <i class="material-icons">manage_accounts</i>
+                            <p>Profile</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <a class="navbar-brand" href="javascript:void(0)">Mahasiswa</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                        <span class="navbar-toggler-icon icon-bar"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0)">
+                                    <i><img src="../assets/img/faces/<?php echo $_SESSION['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></i>
+                                    <p class="d-lg-none d-md-block">
+                                        <?php
+                                        echo $_SESSION['nama'];
+                                        ?>
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../autentikasi/logout.php" onclick="return confirm('Anda Akan Log Out')">
+                                    <i class="material-icons">logout</i>
+                                    <p class="d-lg-none d-md-block">
+                                        Log Out
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card card-profile pull-middle">
-                        <div class="card-avatar">
-                            <a href="#">
-                                <img class="img" src="../assets/img/Logo-Unand.png" />
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">Sistem Informasi Pendataan Alumni</h4>
-                            <h4 class="card-title">Fakultas Teknologi Informasi</h4>
-                            <h4 class="card-title">Universitas Andalas</h4>
-                        </div>
-                        <form method="POST" action="login.php">
-                            <div class="row mt-5">
-                                <div class="col-md-12">
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header card-header-primary">
+                                    <h4 class="card-title ">Daftar Mahasiswa</h4>
+                                </div>
+                                <div class="card-body">
                                     <?php
                                     if (isset($gagal)) {
                                     ?>
                                         <p class="text-danger pull-middle"><?php echo $gagal; ?></p>
                                     <?php
                                     }
-                                    if (isset($_GET['info'])) {
+                                    if (isset($berhasil)) {
                                     ?>
-                                        <p class="text-info pull-middle"><?php echo "Silakan Log In Terlebih Dahulu!"; ?></p>
+                                        <p class="text-success pull-middle"><?php echo $berhasil; ?></p>
                                     <?php
                                     }
                                     ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group text-left">
-                                        <label class="bmd-label-floating">NIM/NIP</label>
-                                        <input type="text" class="form-control" name="nim_nip">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="example">
+                                            <thead class=" text-primary">
+                                                <th>NIM</th>
+                                                <th>Nama</th>
+                                                <th>Jurusan</th>
+                                                <th>Tanggal Lahir</th>
+                                                <th>Jenis Kelamin</th>
+                                                <th>Foto</th>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                $query = mysqli_query($koneksi, "select * from mahasiswa order by nama asc");
+
+                                                while ($tampil = mysqli_fetch_array($query)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><?php echo $tampil['nim']; ?></td>
+                                                        <td><?php echo $tampil['nama']; ?></td>
+                                                        <td>
+                                                            <?php
+                                                            if ($tampil['kode_jurusan'] == 1) {
+                                                                echo "Sistem Informasi";
+                                                            } else {
+                                                                echo "Teknik Komputer";
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td><?php echo $tampil['tanggal_lahir']; ?></td>
+                                                        <td><?php echo $tampil['jenis_kelamin']; ?></td>
+                                                        <td><img src="../assets/img/faces/<?php echo $tampil['foto']; ?>" style="width: 25px; height: 25px; border-radius: 30px;"></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-2">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group text-left">
-                                        <label class="bmd-label-floating">Password</label>
-                                        <input type="password" class="form-control" name="password">
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary pull-middle mt-3 mb-3" name="login">Log In</button>
-                            <div class="clearfix"></div>
-                        </form>
-                        <footer class="footer">
-                            <div class="container-fluid">
-                                <div class="copyright float-center" id="date">
-                                    , made by
-                                    <a href="#">Kelompok 9</a>
-                                </div>
-                            </div>
-                        </footer>
+                        </div>
                     </div>
                 </div>
             </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-12">
+                            <h5 class="text-center">
+                                2021, made by Kelompok 9
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <script>
+                const x = new Date().getFullYear();
+                let date = document.getElementById('date');
+                date.innerHTML = '&copy; ' + x + date.innerHTML;
+            </script>
         </div>
     </div>
-    <script>
-        const x = new Date().getFullYear();
-        let date = document.getElementById('date');
-        date.innerHTML = '&copy; ' + x + date.innerHTML;
-    </script>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="../assets/js/core/popper.min.js"></script>
@@ -326,6 +386,13 @@ if (isset($_POST['login'])) {
 
                 });
             });
+        });
+    </script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
         });
     </script>
 </body>

@@ -2,7 +2,7 @@
 
 session_start();
 
-if ($_SESSION['role'] != "Admin") {
+if ($_SESSION['role'] != "User_Alumni") {
   header("location:../");
 }
 
@@ -60,13 +60,6 @@ if (isset($_GET['hapus'])) {
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./daftar_admin.php">
-              <i class="material-icons">admin_panel_settings</i>
-              <p>Admin</p>
-            </a>
-          </li>
           <li class="nav-item active">
             <a class="nav-link" href="./data_alumni.php">
               <i class="material-icons">person</i>
@@ -129,7 +122,6 @@ if (isset($_GET['hapus'])) {
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
-          <a class="btn btn-info pull-middle" href="tambah_alumni.php"><i class="material-icons">add</i>Tambah Alumni</a>
           <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -186,8 +178,6 @@ if (isset($_GET['hapus'])) {
                             <td>
                               <center>
                                 <a class="btn btn-info pull-middle btn-sm" href="./detail_alumni.php?nim=<?php echo $tampil['nim']; ?>"><i class="material-icons">receipt</i></a>
-                                <a class="btn btn-warning pull-middle btn-sm" href="./edit_alumni.php?nim=<?php echo $tampil['nim']; ?>"><i class="material-icons">edit</i></a>
-                                <a class="btn btn-danger pull-middle btn-sm" href="./data_alumni.php?hapus=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a>
                               </center>
                             </td>
 
