@@ -48,6 +48,14 @@ if (isset($_POST['tambah_admin'])) {
   <link href="../assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    .garis_verikal {
+      border-left: 1px lightgray solid;
+      height: 170px;
+      width: 0px;
+
+    }
+  </style>
 </head>
 
 <body class="dark-edition">
@@ -235,51 +243,42 @@ if (isset($_POST['tambah_admin'])) {
                           </td>
                         </tr>
                         <tr>
-                          <td class="font-weight-bold">
-                            Riwayat Organisasi
-                          </td>
-                          <td>
-                            :
-                          </td>
-                        </tr>
+                      </table>
+                      <table style="font-size: 20px; color: lightgray;" class="mt-5">
                         <tr>
-                          <td colspan="2">
-                            <center>
-                              <Table style="font-size: 15px;">
+                          <td>
+                            <Table style="font-size: 15px;">
+                              <tr>
+                                <td class="font-weight-bold mt-0" style="font-size: 20px;" colspan="3">
+                                  Riwayat Organisasi
+                                </td>
+                              </tr>
+                              <tr>
+                                <th>&emsp;No</th>
+                                <th>&emsp;Nama Organisasi</th>
+                                <th>&emsp;Jabatan</th>
+                              </tr>
+                              <?php
+                              $no = 1;
+                              $nim = $result['nim'];
+                              $query3 = mysqli_query($koneksi, "select * from riwayat_organisasi WHERE nim = '$nim'");
+                              while ($tampil = mysqli_fetch_array($query3)) {
+                              ?>
                                 <tr>
-                                  <th>&emsp;No</th>
-                                  <th>&emsp;Nama Organisasi</th>
-                                  <th>&emsp;Jabatan</th>
+                                  <td>&emsp;<?php echo $no; ?></td>
+                                  <td>&emsp;<?php echo $tampil['nama_organisasi']; ?></td>
+                                  <td>&emsp;<?php echo $tampil['jabatan']; ?>&emsp;&emsp;&emsp;</td>
                                 </tr>
-                                <?php
-                                $no = 1;
-                                $nim = $result['nim'];
-                                $query3 = mysqli_query($koneksi, "select * from riwayat_organisasi WHERE nim = '$nim'");
-                                while ($tampil = mysqli_fetch_array($query3)) {
-                                ?>
-                                  <tr>
-                                    <td>&emsp;<?php echo $no; ?></td>
-                                    <td>&emsp;<?php echo $tampil['nama_organisasi']; ?></td>
-                                    <td>&emsp;<?php echo $tampil['jabatan']; ?></td>
-                                  </tr>
-                                <?php
-                                  $no++;
-                                }
-                                ?>
-                              </Table>
-                            </center>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="font-weight-bold">
-                            Sosial Media
+                              <?php
+                                $no++;
+                              }
+                              ?>
+                            </Table>
                           </td>
                           <td>
-                            :
+                            <div class="garis_verikal"></div>
                           </td>
-                        </tr>
-                        <tr>
-                          <td colspan="2">
+                          <td>
                             <center>
                               <Table style="font-size: 15px;">
                                 <?php
@@ -288,14 +287,14 @@ if (isset($_POST['tambah_admin'])) {
                                 while ($tampil = mysqli_fetch_array($query4)) {
                                 ?>
                                   <tr>
-                                    <td>&emsp;<img src="../assets/img/<?php echo $tampil['nama_sosial_media'] . ".png"; ?>" style="width: 25%; height: 25%; border-radius: 30px;"></td>
-                                    <td><?php echo $tampil['username']; ?></td>
+                                    <td>&emsp;<img src="../assets/img/<?php echo $tampil['nama_sosial_media'] . ".png"; ?>" style="width: 15%; height: 15%; border-radius: 30px;"><?php echo $tampil['username']; ?></td>
                                   </tr>
                                 <?php
                                 }
                                 ?>
                               </Table>
                             </center>
+                          </td>
                           </td>
                         </tr>
                       </table>

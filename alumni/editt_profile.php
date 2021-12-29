@@ -23,6 +23,24 @@ if (isset($_POST['edit_profile'])) {
             $gagal = "Gagal Mengubah Profil!!!";
         }
 
+        $instansi = $_POST['instansi'];
+
+        $query = mysqli_query($koneksi, "update alumni set instansi='$instansi' where nim='$nim'");
+
+        $jabatan = $_POST['jabatan'];
+
+        $query = mysqli_query($koneksi, "update alumni set jabatan='$jabatan' where nim='$nim'");
+
+        $ipk = $_POST['ipk'];
+
+        $query = mysqli_query($koneksi, "update alumni set ipk='$ipk' where nim='$nim'");
+
+        if ($query) {
+            $berhasil = "Berhasil Mengubah Profil!!!";
+        } else {
+            $gagal = "IPK Tidak Valid!!!";
+        }
+
         $image = $_FILES['foto']['name'];
 
         if (!empty($image)) {
@@ -53,6 +71,64 @@ if (isset($_POST['edit_profile'])) {
         }
     }
     $_GET['nim'] = $nim;
+}
+
+if (isset($_POST['tambah_organisasi'])) {
+    if (empty($_POST["nama_organisasi"]) || empty($_POST["jabatan"])) {
+        $gagalo = "Isian Tidak Boleh Kosong!!!";
+    } else {
+        $nama_organisasi = $_POST['nama_organisasi'];
+        $jabatan = $_POST['jabatan'];
+        $nim = $_POST['nim'];
+
+        $query = mysqli_query($koneksi, "insert into riwayat_organisasi (nim, nama_organisasi, jabatan) values ('$nim', '$nama_organisasi', '$jabatan')");
+        if ($query) {
+            $berhasilo = "Berhasil Menambahkan Data";
+        } else {
+            $gagalo = "Gagal Menambahkan Data";
+        }
+    }
+}
+
+if (isset($_GET['hapusno'])) {
+    $no = $_GET['hapusno'];
+    $nim = $_GET['hapusnim'];
+
+    $query = mysqli_query($koneksi, "delete from riwayat_organisasi where no = $no and nim=$nim");
+    if ($query) {
+        $berhasilo = "Berhasil Menghapus Data";
+    } else {
+        $gagalo = "Gagal Menghapus Data";
+    }
+}
+
+if (isset($_POST['tambah_sosmed'])) {
+    if (empty($_POST["kode_sosial_media"]) || empty($_POST["username"])) {
+        $gagals = "Isian Tidak Boleh Kosong!!!";
+    } else {
+        $kode_sosial_media = $_POST['kode_sosial_media'];
+        $username = $_POST['username'];
+        $nim = $_POST['nim'];
+
+        $query = mysqli_query($koneksi, "insert into alumni_sosial_media values ('$nim', '$kode_sosial_media', '$username')");
+        if ($query) {
+            $berhasils = "Berhasil Menambahkan Data";
+        } else {
+            $gagals = "Gagal Menambahkan Data";
+        }
+    }
+}
+
+if (isset($_GET['hapussm'])) {
+    $kode_sosial_media = $_GET['hapussm'];
+    $nim = $_GET['hapusnim'];
+
+    $query = mysqli_query($koneksi, "delete from alumni_sosial_media where kode_sosial_media = $kode_sosial_media and nim=$nim");
+    if ($query) {
+        $berhasils = "Berhasil Menghapus Data";
+    } else {
+        $gagals = "Gagal Menghapus Data";
+    }
 }
 
 ?>
@@ -94,12 +170,6 @@ if (isset($_POST['edit_profile'])) {
                         <a class="nav-link" href="./dashboard.php">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="./daftar_admin.php">
-                            <i class="material-icons">admin_panel_settings</i>
-                            <p>Admin</p>
                         </a>
                     </li>
                     <li class="nav-item ">
@@ -209,9 +279,24 @@ if (isset($_POST['edit_profile'])) {
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="formFile" class="form-label">Ganti Foto</label>
-                                                <input class="form-control" type="file" name="foto">
-                                                <p style="font-size: 12px; color: #8f8f8f;">*ukuran file maksimal 1 mb dan format file : .jpg, .jpeg, .png</p>
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Instansi</label>
+                                                    <input type="text" class="form-control" name="instansi" value="<?php echo $result['instansi']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Jabatan</label>
+                                                    <input type="text" class="form-control" name="jabatan" value="<?php echo $result['jabatan']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">IPK</label>
+                                                    <input type="text" class="form-control" name="ipk" value="<?php echo $result['ipk']; ?>">
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -236,9 +321,184 @@ if (isset($_POST['edit_profile'])) {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="formFile" class="form-label">Ganti Foto</label>
+                                                <input class="form-control" type="file" name="foto">
+                                                <p style="font-size: 12px; color: #8f8f8f;">*ukuran file maksimal 1 mb dan format file : .jpg, .jpeg, .png</p>
+                                            </div>
+                                        </div>
                                         <button type="submit" class="btn btn-primary pull-right mt-5" name="edit_profile">Simpan</button>
                                         <div class="clearfix"></div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header card-header-primary">
+                                    <h4 class="card-title"> Edit Riwayat Organisasi</h4>
+                                </div>
+                                <div class="card-body">
+                                    <?php
+                                    if (isset($gagalo)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagalo; ?></p>
+                                    <?php
+                                    }
+                                    if (isset($berhasilo)) {
+                                    ?>
+                                        <p class="text-success pull-middle"><?php echo $berhasilo; ?></p>
+                                    <?php
+                                    }
+                                    ?>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="example">
+                                            <thead class=" text-primary">
+                                                <th>Nama Organisasi</th>
+                                                <th>Jabatan</th>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                $query = mysqli_query($koneksi, "select * from riwayat_organisasi where nim = $nim");
+
+                                                while ($tampil = mysqli_fetch_array($query)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><?php echo $tampil['nama_organisasi']; ?></td>
+                                                        <td><?php echo $tampil['jabatan']; ?></td>
+                                                        <td><a class="btn btn-danger pull-middle btn-sm" href="./editt_profile.php?hapusno=<?php echo $tampil['no']; ?>&hapusnim=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                                <form action="editt_profile.php" method="POST">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="bmd-label-floating">Nama Organisasi</label>
+                                                                        <input type="text" class="form-control" name="nama_organisasi">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="bmd-label-floating">Jabatan</label>
+                                                                        <input type="text" class="form-control" name="jabatan">
+                                                                        <input type="hidden" class="form-control" name="nim" value="<?php echo $nim; ?>">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="submit" class="btn btn-primary pull-right" name="tambah_organisasi">Simpan</button>
+                                                        </td>
+                                                    </tr>
+                                                </form>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header card-header-primary">
+                                    <h4 class="card-title"> Sosial Media</h4>
+                                </div>
+                                <div class="card-body">
+                                    <?php
+                                    if (isset($gagals)) {
+                                    ?>
+                                        <p class="text-danger pull-middle"><?php echo $gagals; ?></p>
+                                    <?php
+                                    }
+                                    if (isset($berhasils)) {
+                                    ?>
+                                        <p class="text-success pull-middle"><?php echo $berhasils; ?></p>
+                                    <?php
+                                    }
+                                    ?>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="example" style="width: 98%;">
+                                            <thead class=" text-primary">
+                                                <th>Sosial Media</th>
+                                                <th>Username</th>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                $query = mysqli_query($koneksi, "select * from sosial_media, alumni_sosial_media where sosial_media.kode_sosial_media = alumni_sosial_media.kode_sosial_media and alumni_sosial_media.nim = $nim");
+
+                                                while ($tampil = mysqli_fetch_array($query)) {
+
+                                                ?>
+                                                    <tr>
+                                                        <td><img src="../assets/img/<?php echo $tampil['nama_sosial_media'] . ".png"; ?>" style="width: 20%; height: 20%; border-radius: 30px;"></td>
+                                                        <td><?php echo $tampil['username']; ?></td>
+                                                        <td><a class="btn btn-danger pull-middle btn-sm" href="./editt_profile.php?hapussm=<?php echo $tampil['kode_sosial_media']; ?>&hapusnim=<?php echo $tampil['nim']; ?>" onclick="return confirm('Apakah anda yakin menghapus data ini? semua data yang berkaitan akan hilang!!')"><i class="material-icons">delete</i></a></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                $query = mysqli_query($koneksi, "select * from sosial_media where kode_sosial_media not in(select kode_sosial_media from alumni_sosial_media where nim=$nim)");
+                                                if (mysqli_affected_rows($koneksi) != 0) {
+                                                ?>
+                                                    <form action="editt_profile.php" method="POST">
+                                                        <tr>
+                                                            <td>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Sosial Media</label>
+                                                                            <select class="custom-select mt-2" aria-label="Default select example" name="kode_sosial_media">
+                                                                                <option selected>----------------------</option>
+                                                                                <?php
+
+
+                                                                                while ($tampil = mysqli_fetch_array($query)) {
+                                                                                ?>
+
+                                                                                    <option value="<?php echo $tampil['kode_sosial_media']; ?>"><?php echo $tampil['nama_sosial_media']; ?></option>
+
+                                                                                <?php
+                                                                                }
+                                                                                ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label class="bmd-label-floating">Username</label>
+                                                                            <input type="text" class="form-control" name="username">
+                                                                            <input type="hidden" class="form-control" name="nim" value="<?php echo $nim; ?>">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <button type="submit" class="btn btn-primary pull-right" name="tambah_sosmed">Simpan</button>
+                                                            </td>
+                                                        </tr>
+                                                    </form>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
