@@ -9,14 +9,15 @@ if ($_SESSION['role'] != "User_Alumni") {
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
 
 if (isset($_POST['edit_profile'])) {
-    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
+    if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"]) || empty($_POST["tanggal_lahir"])) {
         $gagal = "Isian Tidak Boleh Kosong!!!";
     } else {
         $nim = $_POST['nip'];
         $nama = $_POST['nama'];
+        $tanggal_lahir = $_POST['tanggal_lahir'];
         $jenis_kelamin = $_POST["jenis_kelamin"];
 
-        $query2 = mysqli_query($koneksi, "update alumni set nama='$nama', jenis_kelamin='$jenis_kelamin' where nim='$nim'");
+        $query2 = mysqli_query($koneksi, "update alumni set nama='$nama', tanggal_lahir='$tanggal_lahir', jenis_kelamin='$jenis_kelamin' where nim='$nim'");
         if ($query2) {
             $berhasil = "Berhasil Mengubah Profil!!!";
         } else {
@@ -280,22 +281,8 @@ if (isset($_GET['hapussm'])) {
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="bmd-label-floating">Instansi</label>
-                                                    <input type="text" class="form-control" name="instansi" value="<?php echo $result['instansi']; ?>">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">Jabatan</label>
-                                                    <input type="text" class="form-control" name="jabatan" value="<?php echo $result['jabatan']; ?>">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="bmd-label-floating">IPK</label>
-                                                    <input type="text" class="form-control" name="ipk" value="<?php echo $result['ipk']; ?>">
+                                                    <label class="bmd-label-floating">Tanggal Lahir</label>
+                                                    <input type="date" class="form-control" name="tanggal_lahir" value="<?php echo $result['tanggal_lahir']; ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -322,6 +309,26 @@ if (isset($_GET['hapussm'])) {
                                             </div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Instansi</label>
+                                                    <input type="text" class="form-control" name="instansi" value="<?php echo $result['instansi']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">Jabatan</label>
+                                                    <input type="text" class="form-control" name="jabatan" value="<?php echo $result['jabatan']; ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="bmd-label-floating">IPK</label>
+                                                    <input type="text" class="form-control" name="ipk" value="<?php echo $result['ipk']; ?>">
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <label for="formFile" class="form-label">Ganti Foto</label>
                                                 <input class="form-control" type="file" name="foto">
