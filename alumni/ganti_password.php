@@ -97,12 +97,6 @@ if (isset($_POST['ganti'])) {
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="./daftar_admin.php">
-                            <i class="material-icons">admin_panel_settings</i>
-                            <p>Admin</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
                         <a class="nav-link" href="./data_alumni.php">
                             <i class="material-icons">person</i>
                             <p>Alumni</p>
