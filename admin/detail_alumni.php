@@ -2,31 +2,11 @@
 
 session_start();
 
-if ($_SESSION['role'] != "User_Alumni") {
+if ($_SESSION['role'] != "Admin") {
   header("location:../");
 }
 
 $koneksi = mysqli_connect("localhost", "root", "", "pendataan_alumni_fti");
-
-if (isset($_POST['tambah_admin'])) {
-  if (empty($_POST["nip"]) || empty($_POST["nama"]) || empty($_POST["jenis_kelamin"])) {
-    $gagal = "Isian Tidak Boleh Kosong!!!";
-  } else {
-    $nip = $_POST['nip'];
-    $nama = $_POST['nama'];
-    $jenis_kelamin = $_POST["jenis_kelamin"];
-    $password = "12345678";
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $query = mysqli_query($koneksi, "insert into user values ('$nip', '$password', 'Admin')");
-    $query2 = mysqli_query($koneksi, "insert into staf_fakultas values ('$nip', '$nama', '$jenis_kelamin', 'default.jpg')");
-
-    if (($query) && ($query2)) {
-      $berhasil = "Berhasil Menambahkan Admin!!!";
-    } else {
-      $gagal = "Gagal Menambahkan Admin!!!";
-    }
-  }
-}
 
 ?>
 <!DOCTYPE html>
@@ -78,6 +58,12 @@ if (isset($_POST['tambah_admin'])) {
             </a>
           </li>
           <li class="nav-item ">
+            <a class="nav-link" href="./daftar_admin.php">
+              <i class="material-icons">admin_panel_settings</i>
+              <p>Admin</p>
+            </a>
+          </li>
+          <li class="nav-item active">
             <a class="nav-link" href="./data_alumni.php">
               <i class="material-icons">person</i>
               <p>Alumni</p>
@@ -90,7 +76,7 @@ if (isset($_POST['tambah_admin'])) {
               <p>Mahasiswa</p>
             </a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="./edit_profile.php">
               <i class="material-icons">manage_accounts</i>
               <p>Profile</p>
@@ -104,7 +90,7 @@ if (isset($_POST['tambah_admin'])) {
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:void(0)">Profile</a>
+            <a class="navbar-brand" href="javascript:void(0)">Alumni</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
             <span class="sr-only">Toggle navigation</span>
@@ -139,12 +125,11 @@ if (isset($_POST['tambah_admin'])) {
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
-          <a class="btn btn-warning" href="ganti_password.php">Ganti Password</a><a class="btn btn-warning" href="editt_profile.php">Edit Profile</a>
           <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Profile</h4>
+                  <h4 class="card-title">Detail Alumni</h4>
                 </div>
                 <div class="card-body">
                   <?php
@@ -159,7 +144,7 @@ if (isset($_POST['tambah_admin'])) {
                   <?php
                   }
 
-                  $nim = $_SESSION['nim'];
+                  $nim = $_GET['nim'];
                   $query = mysqli_query($koneksi, "select * from alumni WHERE nim = '$nim'");
                   $result = mysqli_fetch_assoc($query);
                   ?>
@@ -247,33 +232,41 @@ if (isset($_POST['tambah_admin'])) {
                       <table style="font-size: 20px; color: lightgray;" class="mt-5">
                         <tr>
                           <td>
-                            <Table style="font-size: 15px;">
-                              <tr>
-                                <td class="font-weight-bold mt-0" style="font-size: 20px;" colspan="3">
-                                  Riwayat Organisasi
-                                </td>
-                              </tr>
-                              <tr>
-                                <th>&emsp;No</th>
-                                <th>&emsp;Nama Organisasi</th>
-                                <th>&emsp;Jabatan&emsp;&emsp;&emsp;</th>
-                              </tr>
-                              <?php
-                              $no = 1;
-                              $nim = $result['nim'];
-                              $query3 = mysqli_query($koneksi, "select * from riwayat_organisasi WHERE nim = '$nim'");
-                              while ($tampil = mysqli_fetch_array($query3)) {
-                              ?>
+                            <?php
+                            $nim = $result['nim'];
+                            $query3 = mysqli_query($koneksi, "select * from riwayat_organisasi WHERE nim = '$nim'");
+                            if (mysqli_affected_rows($koneksi) != 0) {
+                            ?>
+                              <Table style="font-size: 15px;">
                                 <tr>
-                                  <td>&emsp;<?php echo $no; ?></td>
-                                  <td>&emsp;<?php echo $tampil['nama_organisasi']; ?></td>
-                                  <td>&emsp;<?php echo $tampil['jabatan']; ?></td>
+                                  <td class="font-weight-bold mt-0" style="font-size: 20px;" colspan="3">
+                                    Riwayat Organisasi
+                                  </td>
                                 </tr>
-                              <?php
-                                $no++;
-                              }
-                              ?>
-                            </Table>
+                                <tr>
+                                  <th>&emsp;No</th>
+                                  <th>&emsp;Nama Organisasi</th>
+                                  <th>&emsp;Jabatan&emsp;&emsp;&emsp;</th>
+                                </tr>
+                                <?php
+                                $no = 1;
+                                $nim = $result['nim'];
+                                $query3 = mysqli_query($koneksi, "select * from riwayat_organisasi WHERE nim = '$nim'");
+                                while ($tampil = mysqli_fetch_array($query3)) {
+                                ?>
+                                  <tr>
+                                    <td>&emsp;<?php echo $no; ?></td>
+                                    <td>&emsp;<?php echo $tampil['nama_organisasi']; ?></td>
+                                    <td>&emsp;<?php echo $tampil['jabatan']; ?></td>
+                                  </tr>
+                                <?php
+                                  $no++;
+                                }
+                                ?>
+                              </Table>
+                            <?php
+                            }
+                            ?>
                           </td>
                           <td>
                             <div class="garis_verikal"></div>
